@@ -1,4 +1,5 @@
 name: Flask Quiz App CI
+
 on:
   push:
     branches: [ "master" ]
@@ -34,6 +35,8 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     needs: build
+    # Specify the environment to access environment secrets
+    environment: DOCKERHUB_USERNAME
     # Only run on pushes to master (not on pull requests)
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     steps:
@@ -43,7 +46,7 @@ jobs:
       - name: Log in to DockerHub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }} 
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       
       - name: Build and push Docker image
